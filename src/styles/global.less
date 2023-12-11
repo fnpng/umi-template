@@ -1,0 +1,50 @@
+@import 'nprogress/nprogress.css';
+@import '@icon-park/react/styles/index.css';
+@import './custom.less';
+
+:root {
+  --theme-color: #165dff;
+  --text-color: rgb(100 116 139);
+}
+
+#nprogress .bar {
+  background-color: var(--theme-color);
+}
+
+#loading-container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 99999;
+  background: rgba(255, 255, 255, 60%);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cdd1d4;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.ant-pro-sider-collapsed-button {
+  top: auto;
+  bottom: 32px;
+}
+
+.ant-pagination-total-text {
+  position: absolute;
+  left: 0;
+}

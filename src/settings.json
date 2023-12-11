@@ -1,0 +1,10 @@
+{
+  "title": "摩数智能大数据综合平台",
+  "navbar": true,
+  "menu": true,
+  "footer": true,
+  "breadcrumb": true,
+  "themeColor": "#165DFF",
+  "siderWidth": 240,
+  "copyright": "Copyright © 2022-2024"
+}
