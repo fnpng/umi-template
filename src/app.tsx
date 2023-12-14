@@ -18,7 +18,8 @@ NProgress.configure({ showSpinner: false });
 export const layout = () => {
   const settings = getSettings();
   const avatarProps = getAvatarProps();
-  const fullScreen = settings.hideNavbar && settings.hideMenu;
+  const fullScreen =
+    settings.hideNavbar || settings.hideMenu || settings.hideInBreadcrumb;
   const menuRenderSettings = settings.hideMenu ? { menuRender: false } : {};
 
   return {
