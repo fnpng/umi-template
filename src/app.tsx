@@ -1,5 +1,6 @@
 import '@/mock';
 import routes from '@/routes';
+import settings from '@/settings.json';
 import getSettings from '@/utils/getSettings';
 import { getAvatarProps } from '@/utils/getUserInfo';
 import { LoadingFour } from '@icon-park/react';
@@ -53,7 +54,7 @@ export const layout = () => {
         colorMenuItemDivider: '#dfdfdf',
         colorTextMenu: '#595959',
         colorTextMenuSelected: settings?.themeColor,
-        colorBgMenuItemSelected: '#E6F3FE',
+        colorBgMenuItemSelected: '#f0f4ff',
       },
     },
     route: {
@@ -66,8 +67,19 @@ export const layout = () => {
 
 export function rootContainer(container: React.ReactNode) {
   return (
-    <ConfigProvider>
-      <App>
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: settings.themeColor,
+        },
+        components: {
+          Segmented: {
+            itemSelectedColor: settings?.themeColor,
+          },
+        },
+      }}
+    >
+      <App message={{ maxCount: 3 }}>
         <AntdFeedback />
         {container}
       </App>
