@@ -1,33 +1,34 @@
-import settings from '@/settings.json';
+import { userStore } from '@/store';
 import getUrlParams from '@/utils/getUrlParams';
-import { useRouteProps } from '@umijs/max';
+import { useRouteProps, useSnapshot } from '@umijs/max';
 
 const getSettings = () => {
   const routeProps = useRouteProps();
   const urlParams = getUrlParams();
+  const { userSettings } = useSnapshot(userStore);
 
   const hideNavbar =
-    !settings.navbar ||
+    !userSettings.navbar ||
     urlParams.navbar === false ||
     routeProps?.headerRender === false;
 
   const hideMenu =
-    !settings.menu ||
+    !userSettings.menu ||
     urlParams.menu === false ||
     routeProps?.menuRender === false;
 
   const hideFooter =
-    !settings.footer ||
+    !userSettings.footer ||
     urlParams.footer === false ||
     routeProps?.footerRender === false;
 
   const hideInBreadcrumb =
-    !settings.breadcrumb ||
+    !userSettings.breadcrumb ||
     urlParams.breadcrumb === false ||
     routeProps?.hideInBreadcrumb === true;
 
   return {
-    ...settings,
+    ...userSettings,
     hideNavbar,
     hideMenu,
     hideFooter,

@@ -7,7 +7,7 @@ export default function Search({
   onSearch: (value: Record<string, unknown>) => void;
 }) {
   return (
-    <SearchCard onSearch={onSearch} labelWidth={60}>
+    <SearchCard onSearch={onSearch} labelWidth={70}>
       <Form.Item label="用户ID" name="userId">
         <Input placeholder="请输入" />
       </Form.Item>

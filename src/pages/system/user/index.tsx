@@ -1,4 +1,3 @@
-import API, { DataType } from '@/api/system';
 import { Message } from '@/components/AntdFeedback';
 import {
   Button,
@@ -18,7 +17,7 @@ import Search from './components/search';
 const { Link } = Typography;
 
 export default function WorkFlow() {
-  const [list, setList] = useState<DataType[]>([]);
+  const [list, setList] = useState<[]>([]);
   const [pagination, setPagination] = useState<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -28,12 +27,10 @@ export default function WorkFlow() {
   const [visible, setVisible] = useState(false);
   const [modalInfo, setModalInfo] = useState({
     mode: 'add' as 'add' | 'edit',
-    record: null as DataType | null,
+    record: null,
   });
 
-  console.log('UMI_ENV', process.env.UMI_ENV);
-
-  const columns: ColumnsType<DataType> = [
+  const columns: ColumnsType<Record<string, unknown>> = [
     {
       title: '序号',
       dataIndex: 'key',
@@ -106,12 +103,6 @@ export default function WorkFlow() {
             <Link
               onClick={() => {
                 const newList = [...list];
-                const index = list.findIndex((item) => item.userId === userId);
-                newList.splice(index, 1, {
-                  ...record,
-                  status: status === 1 ? -1 : 1,
-                });
-                setList(newList);
                 Message.success('操作成功');
               }}
             >
@@ -133,14 +124,14 @@ export default function WorkFlow() {
   const getList = async (params = {}) => {
     setLoading(true);
     try {
-      const {
-        data: { total, current, pageSize, list },
-      } = await API.getUserList({
-        ...pagination,
-        ...params,
-      });
+      // const {
+      //   data: { total, current, pageSize, list },
+      // } = await API.getUserList({
+      //   ...pagination,
+      //   ...params,
+      // });
       setList(list || []);
-      setPagination({ ...pagination, total, current, pageSize });
+      // setPagination({ ...pagination, total, current, pageSize });
     } finally {
       setLoading(false);
     }
@@ -158,7 +149,7 @@ export default function WorkFlow() {
     setVisible(true);
   };
 
-  const onEdit = (record: DataType) => {
+  const onEdit = (record: any) => {
     setModalInfo({
       mode: 'edit',
       record,
@@ -166,12 +157,12 @@ export default function WorkFlow() {
     setVisible(true);
   };
 
-  const onDelete = async ({ userId }: DataType) => {
-    const res = await API.deleteUserById({ userId });
-    if (res.code === 200) {
-      Message.success('删除成功');
-      getList();
-    }
+  const onDelete = async ({ userId }: any) => {
+    // const res = await API.deleteUserById({ userId });
+    // if (res.code === 200) {
+    //   Message.success('删除成功');
+    //   getList();
+    // }
   };
 
   const onSearch = (values: Record<string, unknown>) => {
@@ -206,7 +197,7 @@ export default function WorkFlow() {
     <div className="">
       <Search onSearch={onSearch} />
       <Card
-        className="mt-4 custom-card"
+        className="mt-4 custom_card"
         bordered={false}
         title="用户列表"
         extra={

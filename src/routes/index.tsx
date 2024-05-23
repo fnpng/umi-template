@@ -1,6 +1,6 @@
 import { Home } from '@icon-park/react';
 import React from 'react';
-import systemManagement from './system-management';
+import system from './system';
 
 export const routes: IBestAFSRoute[] = [
   {
@@ -15,10 +15,10 @@ export const routes: IBestAFSRoute[] = [
   {
     name: '首页',
     path: '/home',
-    component: './homepage',
+    component: './home',
     icon: <Home />,
   },
-  ...systemManagement,
+  ...system,
   { path: '/*', component: '@/pages/404' },
 ];
 

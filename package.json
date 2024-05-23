@@ -3,38 +3,43 @@
   "author": "polarss <surface.zhu@gmail.com>",
   "scripts": {
     "build": "max build",
-    "build:mock": "cross-env UMI_ENV=mock max build",
     "dev": "max dev",
-    "dev:mock": "cross-env UMI_ENV=mock max dev",
     "format": "prettier --cache --write .",
+    "openapi": "ts-node openapi.config.ts",
     "preview": "max preview --port 9527",
-    "prod": "cross-env UMI_ENV=prod max dev",
-    "start": "cross-env UMI_ENV=stg max dev"
+    "start": "max dev"
   },
   "dependencies": {
+    "@ant-design/cssinjs": "^1.20.0",
     "@ant-design/icons": "^5.0.1",
     "@ant-design/pro-components": "^2.4.4",
     "@icon-park/react": "^1.4.2",
-    "@umijs/max": "^4.0.88",
+    "@monaco-editor/react": "^4.6.0",
+    "@umijs/max": "^4.1.2",
+    "@umijs/openapi": "^1.11.1",
+    "ahooks": "^3.7.11",
     "antd": "^5.4.0",
-    "axios": "^1.6.2",
-    "cross-env": "^7.0.3",
+    "axios": "^1.6.8",
     "dayjs": "^1.11.10",
+    "echarts-for-react": "^3.0.2",
     "mockjs": "^1.1.0",
-    "nprogress": "^0.2.0",
-    "query-string": "^8.1.0"
+    "monaco-editor": "^0.47.0",
+    "nprogress": "^0.2.0"
   },
   "devDependencies": {
     "@types/mockjs": "^1.0.10",
+    "@types/node": "^20.11.30",
     "@types/nprogress": "^0.2.3",
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.0",
+    "monaco-editor-webpack-plugin": "^7.1.0",
     "prettier": "^2.8.7",
     "prettier-plugin-organize-imports": "^3.2.2",
     "prettier-plugin-packagejson": "^2.4.3",
-    "tailwindcss": "^3",
+    "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.0.3"
   }
 }

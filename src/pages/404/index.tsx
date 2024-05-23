@@ -29,7 +29,7 @@ export default function NotFound() {
   };
 
   return (
-    <Card className={`${getHeight()} space-center`}>
+    <Card className={`${getHeight()} space_center`}>
       <Empty description="没有找到页面">
         <Button type="primary" onClick={() => navigate(-1)}>
           返回

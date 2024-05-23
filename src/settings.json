@@ -1,10 +1,10 @@
 {
-  "title": "摩数智能大数据综合平台",
+  "title": "UNI_MAX 模版演示平台",
   "navbar": true,
   "menu": true,
   "footer": true,
   "breadcrumb": true,
-  "themeColor": "#165DFF",
+  "themeColor": "#6366f1",
   "siderWidth": 240,
   "copyright": "Copyright © 2022-2024"
 }

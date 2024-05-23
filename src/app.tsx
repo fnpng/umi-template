@@ -1,23 +1,22 @@
-import '@/mock';
 import routes from '@/routes';
-import settings from '@/settings.json';
 import getSettings from '@/utils/getSettings';
-import { getAvatarProps } from '@/utils/getUserInfo';
+import { StyleProvider, px2remTransformer } from '@ant-design/cssinjs';
 import { LoadingFour } from '@icon-park/react';
 import '@icon-park/react/styles/index.css';
+import { AxiosResponse, RequestConfig } from '@umijs/max';
 import { App, ConfigProvider, Spin } from 'antd';
 import NProgress from 'nprogress';
-import React from 'react';
-import AntdFeedback from './components/AntdFeedback';
+import { ActionsRender } from './components/ActionsRender';
+import AntdFeedback, { Message } from './components/AntdFeedback';
+import { AvatarProps } from './components/AvatarProps';
+import { userStore } from './store';
 import './styles/global.less';
 
 Spin.setDefaultIndicator(<LoadingFour style={{ fontSize: 24 }} spin />);
 NProgress.configure({ showSpinner: false });
 
-// 全局初始化数据配置，用于 Layout 用户信息和权限初始化,支持 ProLayout 入参: https://procomponents.ant.design/components/layout
 export const layout = () => {
   const settings = getSettings();
-  const avatarProps = getAvatarProps();
   const fullScreen =
     settings.hideNavbar || settings.hideMenu || settings.hideInBreadcrumb;
   const menuRenderSettings = settings.hideMenu ? { menuRender: false } : {};
@@ -49,41 +48,50 @@ export const layout = () => {
         colorMenuItemDivider: '#dfdfdf',
         colorTextMenu: '#595959',
         colorTextMenuSelected: settings?.themeColor,
+        colorBgMenuItemSelected: `${settings?.themeColor}10`,
       },
       sider: {
-        colorMenuBackground: '#fff',
+        colorMenuBackground:
+          'linear-gradient(to bottom, #fff, #fff, #fff, #eef2ff)',
         colorMenuItemDivider: '#dfdfdf',
         colorTextMenu: '#595959',
         colorTextMenuSelected: settings?.themeColor,
-        colorBgMenuItemSelected: '#f0f4ff',
+        colorBgMenuItemSelected: `${settings?.themeColor}10`,
       },
     },
     route: {
       path: '/',
       routes,
     },
-    avatarProps,
+    actionsRender: ActionsRender,
+    avatarProps: AvatarProps(),
   };
 };
 
 export function rootContainer(container: React.ReactNode) {
+  const px2rem = px2remTransformer({
+    rootValue: 14, // 32px = 1rem; @default 16
+  });
   return (
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: settings.themeColor,
+          colorPrimary: userStore.userSettings?.themeColor,
+          colorLink: userStore.userSettings?.themeColor,
         },
         components: {
           Segmented: {
-            itemSelectedColor: settings?.themeColor,
+            itemSelectedColor: userStore.userSettings?.themeColor,
           },
         },
       }}
     >
-      <App message={{ maxCount: 3 }}>
-        <AntdFeedback />
-        {container}
-      </App>
+      <StyleProvider transformers={[px2rem]}>
+        <App message={{ maxCount: 3 }}>
+          <AntdFeedback />
+          {container}
+        </App>
+      </StyleProvider>
     </ConfigProvider>
   );
 }
@@ -92,3 +100,56 @@ export function onRouteChange() {
   NProgress.start();
   NProgress.done();
 }
+
+export const request: RequestConfig = {
+  timeout: 30000,
+  errorConfig: {
+    errorHandler() {},
+    errorThrower() {},
+  },
+  requestInterceptors: [
+    (url: string, options: Record<string, unknown>) => {
+      const token = window.localStorage.getItem('token');
+      if (token) {
+        (options.headers as Record<string, string>)['token'] = token;
+      } else {
+        const filterPath = ['/login'];
+        if (!filterPath.includes(window.location.pathname)) {
+          setTimeout(() => {
+            // window.location.pathname = '/login';
+          }, 100);
+          // Message.warning('登录过期，请重新登录');
+        }
+      }
+      return { url, options };
+    },
+  ],
+  responseInterceptors: [
+    (response) => {
+      const { data = {} } = response as AxiosResponse<Record<string, unknown>>;
+      if (data?.code === 200) {
+        return response;
+      } else {
+        const { code, message } = data;
+        switch (code) {
+          case 1001:
+            return response;
+          case 1003:
+          case 1005:
+            setTimeout(() => {
+              // window.location.pathname = '/login';
+              // Message.warning('登录过期，请重新登录');
+            }, 100);
+            return response;
+          default:
+            if (message) {
+              Message.error({
+                content: JSON.stringify(message || data?.data),
+              });
+            }
+            return response;
+        }
+      }
+    },
+  ],
+};

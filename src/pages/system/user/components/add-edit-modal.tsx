@@ -1,4 +1,3 @@
-import { DataType } from '@/api/system';
 import { Form, Input, Modal } from 'antd';
 import { Store } from 'antd/es/form/interface';
 
@@ -9,7 +8,7 @@ export default function AddEditModal({
 }: {
   modalInfo: {
     mode: 'add' | 'edit';
-    record: DataType | null;
+    record: any;
   };
   onOk: (value: Record<string, unknown>) => void;
   onCancel: () => void;

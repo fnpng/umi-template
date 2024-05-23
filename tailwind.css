@@ -3,10 +3,13 @@
 @tailwind utilities;
 
 @layer utilities {
-  .space-center {
+  .flex_center {
+    @apply flex items-center;
+  }
+  .space_center {
     @apply flex items-center justify-center;
   }
-  .space-bewteen {
+  .space_bewteen {
     @apply flex items-center justify-between;
   }
 }

@@ -21,7 +21,7 @@ export default function SearchCard({ ...props }) {
   return (
     <Card
       bordered={false}
-      className="custom-card custom-search-card"
+      className="custom_card custom_search_card"
       title={title}
     >
       <ConfigProvider
