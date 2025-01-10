@@ -35,7 +35,7 @@ export default function WorkFlow() {
       title: '序号',
       dataIndex: 'key',
       align: 'center',
-      width: 64,
+      width: 72,
       render: (text, record, index) => {
         const { current, pageSize } = pagination;
         return ((current as number) - 1) * (pageSize as number) + index + 1;

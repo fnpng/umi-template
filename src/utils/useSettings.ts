@@ -2,7 +2,7 @@ import { userStore } from '@/store';
 import getUrlParams from '@/utils/getUrlParams';
 import { useRouteProps, useSnapshot } from '@umijs/max';
 
-const getSettings = () => {
+const useSettings = () => {
   const routeProps = useRouteProps();
   const urlParams = getUrlParams();
   const { userSettings } = useSnapshot(userStore);
@@ -36,6 +36,6 @@ const getSettings = () => {
   };
 };
 
-export default getSettings;
+export default useSettings;
 
-export type Settings = ReturnType<typeof getSettings>;
+export type Settings = ReturnType<typeof useSettings>;

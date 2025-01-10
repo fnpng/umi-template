@@ -1,5 +1,5 @@
 import routes from '@/routes';
-import getSettings from '@/utils/getSettings';
+import useSettings from '@/utils/useSettings';
 import { StyleProvider, px2remTransformer } from '@ant-design/cssinjs';
 import { LoadingFour } from '@icon-park/react';
 import '@icon-park/react/styles/index.css';
@@ -13,13 +13,18 @@ import { userStore } from './store';
 import './styles/global.less';
 
 Spin.setDefaultIndicator(<LoadingFour style={{ fontSize: 24 }} spin />);
-NProgress.configure({ showSpinner: false });
+NProgress.configure({
+  showSpinner: false,
+});
 
 export const layout = () => {
-  const settings = getSettings();
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const settings = useSettings();
   const fullScreen =
     settings.hideNavbar || settings.hideMenu || settings.hideInBreadcrumb;
   const menuRenderSettings = settings.hideMenu ? { menuRender: false } : {};
+  const element = document.querySelector('#nprogress .bar') as HTMLElement;
+  element?.style.setProperty('background-color', settings.themeColor as string);
 
   return {
     logo: '/favicon.svg',
@@ -39,9 +44,15 @@ export const layout = () => {
     token: {
       bgLayout: 'rgba(242,243,245,1)',
       pageContainer: {
-        paddingBlockPageContainerContent: fullScreen ? 0 : 16,
-        paddingInlinePageContainerContent: fullScreen ? 0 : 24,
+        paddingBlockPageContainerContent: 16,
+        paddingInlinePageContainerContent: 24,
       },
+      // pageContainer: {
+      //   paddingBlockPageContainerContent:
+      //     fullScreen && !settings.hideNavbar ? 0 : 16,
+      //   paddingInlinePageContainerContent:
+      //     fullScreen && !settings.hideNavbar ? 0 : 24,
+      // },
       header: {
         colorBgHeader: '#fff',
         colorMenuBackground: '#fff',

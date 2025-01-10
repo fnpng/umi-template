@@ -1,17 +1,23 @@
-import getSettings from '@/utils/getSettings';
+import useSettings from '@/utils/useSettings';
 import LoginForm from './login-form';
 
 export default function LoginPage() {
-  const settings = getSettings();
+  const settings = useSettings();
   return (
-    <div className="w-screen h-screen space_center">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(45rem_50rem_at_top,theme(colors.indigo.100),white)] opacity-20" />
-      <div className="absolute inset-y-0 right-1/2 -z-10 mr-16 w-[200%] origin-bottom-left skew-x-[-30deg] bg-white shadow-xl shadow-indigo-600/10 ring-1 ring-indigo-50 sm:mr-28 lg:mr-0 xl:mr-16 xl:origin-center" />
-      <div className="relative bottom-[60px]">
-        <LoginForm settings={settings} />
+    <div className="grid min-h-svh lg:grid-cols-2 ">
+      <div className="relative hidden bg-muted lg:block">
+        <img
+          src={require('@/assets/placeholder.svg').default}
+          alt="Image"
+          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+        />
       </div>
-      <div className="w-full fixed bottom-0 text-center h-[48px] leading-[48px] text-[14px]">
-        {settings?.copyright}
+      <div className="flex flex-col gap-4 p-6 md:p-10 overflow-hidden bg-gradient-to-t from-slate-100 to-white">
+        <div className="flex flex-1 items-center justify-center">
+          <div className="w-full max-w-md">
+            <LoginForm settings={settings} />
+          </div>
+        </div>
       </div>
     </div>
   );

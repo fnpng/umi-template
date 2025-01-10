@@ -34,12 +34,12 @@ const Block = ({
   return (
     <>
       <div className="font-bold mb-2">{title}</div>
-      <div className="space-y-3">
+      <div className="space-y-2">
         {options &&
           options.map((item) => {
             return (
-              <div className="space_between w-full" key={item.value}>
-                <span>{item.label}</span>
+              <div className={`space_between w-full`} key={item.value}>
+                <span className="w-full">{item.label}</span>
                 <Form.Item
                   name={item.value}
                   label=""
@@ -53,13 +53,13 @@ const Block = ({
                   ) : item.type === 'number' ? (
                     <InputNumber
                       suffix="px"
-                      className="w-[200px]"
+                      className="w-[210px]"
                       placeholder="请输入"
                       onChange={(v) => setUserSettings({ [item.value]: v })}
                     />
                   ) : (
                     <Input
-                      className="w-[200px]"
+                      className="w-[210px]"
                       placeholder="请输入"
                       onChange={(ev) =>
                         setUserSettings({ [item.value]: ev.target.value })
@@ -77,7 +77,13 @@ const Block = ({
   );
 };
 
-export default function PlatteSetting() {
+export default function PlatteSetting({
+  className,
+  color,
+}: {
+  className?: string;
+  color?: string;
+}) {
   const [collapse, setCollapse] = useState(false);
   const { userSettings, setUserSettings } = useSnapshot(userStore);
   const [form] = Form.useForm();
@@ -94,11 +100,12 @@ export default function PlatteSetting() {
   };
 
   return (
-    <>
+    <div className={className} style={{ backgroundColor: color }}>
       <div
         onClick={() => {
           setCollapse(true);
         }}
+        className="px-2 py-1"
       >
         <Platte />
       </div>
@@ -159,6 +166,11 @@ export default function PlatteSetting() {
                 type: 'switch',
               },
               {
+                label: '面包屑',
+                value: 'breadcrumb',
+                type: 'switch',
+              },
+              {
                 label: '侧边菜单',
                 value: 'menu',
                 type: 'switch',
@@ -191,6 +203,6 @@ export default function PlatteSetting() {
           </Button>
         </div>
       </Drawer>
-    </>
+    </div>
   );
 }

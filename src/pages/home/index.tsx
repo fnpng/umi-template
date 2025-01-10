@@ -224,7 +224,7 @@ export default function Metadata() {
   };
 
   return (
-    <div className="grid grid-cols-4 gap-4 pt-2">
+    <div className="grid grid-cols-4 gap-4">
       {statisticItemList.map((item) => {
         return (
           <Card key={item.title}>

@@ -9,7 +9,7 @@
   .space_center {
     @apply flex items-center justify-center;
   }
-  .space_bewteen {
+  .space_between {
     @apply flex items-center justify-between;
   }
 }

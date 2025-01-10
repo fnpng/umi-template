@@ -1,5 +1,4 @@
-import favicon from '@/favicon.svg';
-import { Settings } from '@/utils/getSettings';
+import { Settings } from '@/utils/useSettings';
 import { Lock, User } from '@icon-park/react';
 import { useNavigate } from '@umijs/max';
 import {
@@ -20,6 +19,10 @@ export default function LoginForm({ settings }: { settings: Settings }) {
   return (
     <ConfigProvider
       theme={{
+        token: {
+          colorPrimary: settings?.themeColor,
+          colorLink: settings?.themeColor,
+        },
         components: {
           Form: {
             itemMarginBottom: 20,
@@ -27,39 +30,39 @@ export default function LoginForm({ settings }: { settings: Settings }) {
         },
       }}
     >
-      <div
-        className="max-w-md min-w-[440px] mx-auto rounded-[6px] shadow p-[28px]"
-        style={
-          {
-            // background: 'rgb(255 255 255 / 20%)',
-            // backdropFilter: ' blur(10px)',
-          }
-        }
-      >
+      <div className="max-w-md min-w-[440px] mx-auto rounded-[6px] shadow p-[28px]">
         <div
-          className="text-center text-3xl font-bold mb-4 space_center flex-col"
+          className="text-center gap-3 text-2xl font-bold mb-8 space_center"
           style={{
-            color: settings.themeColor,
             filter: `drop-shadow(1px 1px 1px rgba(0,0,0,0.2))`,
           }}
         >
-          <img src={favicon} alt="logo" className="h-[56px] mb-3" />
+          <div className="space_center p-1 rounded-md bg-slate-200">
+            <img
+              className="w-6 h-6"
+              src={require('@/favicon.svg').default}
+              alt="logo"
+            />
+          </div>
           {settings?.title}
         </div>
+        {/* <div className="text-left text-xl font-bold mb-4 flex-col">
+          欢迎登录
+        </div> */}
         <Form size="large">
           <Form.Item>
-            <div className="block mb-1 text-sm font-medium leading-6 text-gray-900">
+            <div className="block mb-1 font-medium leading-6 text-gray-900">
               用户名
             </div>
             <Input prefix={<User />} placeholder="请输入用户名" />
           </Form.Item>
           <Form.Item>
-            <div className="block mb-1 text-sm font-medium leading-6 text-gray-900">
+            <div className="block mb-1 font-medium leading-6 text-gray-900">
               密码
             </div>
             <Input.Password prefix={<Lock />} placeholder="请输入密码" />
           </Form.Item>
-          <div className="mb-4 space_bewteen">
+          <div className="mb-4 space_between">
             <Checkbox>记住密码</Checkbox>
             <Typography.Link href="#" className="float-right">
               忘记密码

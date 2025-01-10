@@ -1,9 +1,9 @@
-import getSettings from '@/utils/getSettings';
+import useSettings from '@/utils/useSettings';
 import { useNavigate } from '@umijs/max';
 import { Button, Card, Empty } from 'antd';
 
 export default function NotFound() {
-  const { hideNavbar, hideFooter, hideInBreadcrumb, hideMenu } = getSettings();
+  const { hideNavbar, hideFooter, hideInBreadcrumb, hideMenu } = useSettings();
   const navigate = useNavigate();
 
   // hideNavbar = 56px, hideFooter = 32px, hideInBreadcrumb = 48px,padding = 32px
