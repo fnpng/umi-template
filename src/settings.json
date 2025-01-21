@@ -1,10 +1,10 @@
 {
-  "title": "UNI_MAX 模版演示平台",
+  "title": "敏捷开发演示平台",
   "navbar": true,
   "menu": true,
   "footer": true,
   "breadcrumb": true,
-  "themeColor": "#6366f1",
+  "themeColor": "#13A8A8",
   "siderWidth": 240,
   "copyright": "Copyright © 2022-2024"
 }

@@ -1,6 +1,6 @@
 import avatar from '@/assets/avatar.png';
 import userStore from '@/store/user';
-import { Power } from '@icon-park/react';
+import { Me, Power } from '@icon-park/react';
 import { useNavigate, useSnapshot } from '@umijs/max';
 import { Avatar, Dropdown, Modal } from 'antd';
 import { useEffect, useState } from 'react';
@@ -28,18 +28,25 @@ export const AvatarProps = () => {
   }, []);
 
   const onClick = ({ key }: { key: string }) => {
-    if (key === 'logout') {
-      modal.confirm({
-        title: '温馨提示',
-        content: '确定退出登录吗？',
-        okText: '确认',
-        cancelText: '取消',
-        onOk: handleOk,
-      });
+    switch (key) {
+      case 'user-center':
+        navigate('/user-center');
+        break;
+      case 'logout':
+        modal.confirm({
+          title: '温馨提示',
+          content: '确定退出登录吗？',
+          okText: '确认',
+          cancelText: '取消',
+          onOk: handleLogout,
+        });
+        break;
+      default:
+        break;
     }
   };
 
-  const handleOk = () => {
+  const handleLogout = () => {
     navigate('/login');
     setVisible(false);
     localStorage.removeItem('token');
@@ -56,8 +63,16 @@ export const AvatarProps = () => {
           menu={{
             items: [
               {
+                key: 'user-center',
+                icon: <Me size={16} />,
+                label: '个人中心',
+              },
+              {
+                type: 'divider',
+              },
+              {
                 key: 'logout',
-                icon: <Power />,
+                icon: <Power size={16} />,
                 label: '退出登录',
               },
             ],
@@ -65,7 +80,7 @@ export const AvatarProps = () => {
           }}
         >
           <div className="space-x-1">
-            <Avatar src={avatar}></Avatar>
+            <Avatar size={36} src={avatar}></Avatar>
             {dom}
             {contextHolder}
           </div>

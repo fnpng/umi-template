@@ -7,7 +7,12 @@ import { ConfigProvider } from 'antd';
 
 export default function Layouts() {
   const settings = useSettings();
+  const containerBg = '#f3f4f6';
 
+  const themeStyle = {
+    colorBgContainer: containerBg,
+    colorBorder: containerBg,
+  };
   return (
     <ConfigProvider
       theme={{
@@ -19,6 +24,13 @@ export default function Layouts() {
           Segmented: {
             itemSelectedColor: userStore.userSettings?.themeColor,
           },
+          Button: themeStyle,
+          DatePicker: themeStyle,
+          Input: themeStyle,
+          Select: themeStyle,
+          InputNumber: themeStyle,
+          Mentions: themeStyle,
+          ColorPicker: themeStyle,
         },
       }}
     >

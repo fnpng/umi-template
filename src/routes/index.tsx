@@ -18,7 +18,12 @@ export const routes: IBestAFSRoute[] = [
     component: './home',
     icon: <Home />,
   },
+  {
+    path: '/user-center',
+    component: '@/pages/user-center',
+  },
   ...system,
+  // ...infra,
   { path: '/*', component: '@/pages/404' },
 ];
 

@@ -1,4 +1,4 @@
-import { SettingTwo, User } from '@icon-park/react';
+import { Peoples, SettingTwo } from '@icon-park/react';
 import React from 'react';
 import { IBestAFSRoute } from './index';
 
@@ -12,7 +12,7 @@ export default [
       {
         path: '/system/user',
         name: '用户管理',
-        icon: <User />,
+        icon: <Peoples />,
         component: '@/pages/system/user',
       },
     ],

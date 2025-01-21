@@ -5,6 +5,7 @@ import { LoadingFour } from '@icon-park/react';
 import '@icon-park/react/styles/index.css';
 import { AxiosResponse, RequestConfig } from '@umijs/max';
 import { App, ConfigProvider, Spin } from 'antd';
+import zh_CN from 'antd/es/locale/zh_CN';
 import NProgress from 'nprogress';
 import { ActionsRender } from './components/ActionsRender';
 import AntdFeedback, { Message } from './components/AntdFeedback';
@@ -62,8 +63,7 @@ export const layout = () => {
         colorBgMenuItemSelected: `${settings?.themeColor}10`,
       },
       sider: {
-        colorMenuBackground:
-          'linear-gradient(to bottom, #fff, #fff, #fff, #eef2ff)',
+        colorMenuBackground: `linear-gradient(to bottom, #fff, #fff, #fff, ${settings?.themeColor}10)`,
         colorMenuItemDivider: '#dfdfdf',
         colorTextMenu: '#595959',
         colorTextMenuSelected: settings?.themeColor,
@@ -83,8 +83,15 @@ export function rootContainer(container: React.ReactNode) {
   const px2rem = px2remTransformer({
     rootValue: 14, // 32px = 1rem; @default 16
   });
+  const containerBg = '#f3f4f6';
+
+  const themeStyle = {
+    colorBgContainer: containerBg,
+    colorBorder: containerBg,
+  };
   return (
     <ConfigProvider
+      locale={zh_CN}
       theme={{
         token: {
           colorPrimary: userStore.userSettings?.themeColor,
@@ -94,6 +101,13 @@ export function rootContainer(container: React.ReactNode) {
           Segmented: {
             itemSelectedColor: userStore.userSettings?.themeColor,
           },
+          Button: themeStyle,
+          DatePicker: themeStyle,
+          Input: themeStyle,
+          Select: themeStyle,
+          InputNumber: themeStyle,
+          Mentions: themeStyle,
+          ColorPicker: themeStyle,
         },
       }}
     >

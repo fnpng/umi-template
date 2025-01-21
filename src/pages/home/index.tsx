@@ -1,12 +1,19 @@
 import { ColorList, getGradientColor } from '@/utils/useColor';
 import {
   Announcement,
+  Avatar,
   Bookshelf,
+  Config,
   FileWord,
+  FontSearch,
+  IdCard,
+  Me,
+  Message,
+  MessageOne,
   UpTwo,
   WaterfallsV,
 } from '@icon-park/react';
-import { Card, Skeleton, Spin, Statistic } from 'antd';
+import { Card, List, Skeleton, Spin, Statistic } from 'antd';
 import ReactECharts from 'echarts-for-react';
 import Mock from 'mockjs';
 import React, { useEffect } from 'react';
@@ -40,7 +47,7 @@ export default function Metadata() {
     getOverviewData();
   }, []);
 
-  const options = {
+  const lineOptions = {
     grid: { top: 8, right: 8, bottom: 24, left: 50 },
     xAxis: {
       type: 'category',
@@ -125,7 +132,7 @@ export default function Metadata() {
     },
   ];
 
-  const option1 = {
+  const leftBarOptions = {
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -168,13 +175,14 @@ export default function Metadata() {
       type: 'bar',
       encode: { x: 'name', y: 'score' },
       datasetIndex: 1,
+      barWidth: 30,
       itemStyle: {
-        color: getGradientColor(['#7dd3fc', '#3b82f6']),
+        color: getGradientColor(['#3b82f6', '#7dd3fc30']),
       },
     },
   };
 
-  const option2 = {
+  const rightBarOptions = {
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -217,38 +225,107 @@ export default function Metadata() {
       type: 'bar',
       encode: { x: 'name', y: 'score' },
       datasetIndex: 1,
+      barWidth: 30,
       itemStyle: {
-        color: getGradientColor(['#fed7aa', '#f87171']),
+        color: getGradientColor(['#f87171', '#fed7aa30']),
       },
     },
   };
 
+  const quickList = [
+    {
+      icon: <Me />,
+      title: '用户管理',
+    },
+    {
+      icon: <Avatar />,
+      title: '角色管理',
+    },
+    {
+      icon: <Message />,
+      title: '消息通知',
+    },
+    {
+      icon: <IdCard />,
+      title: '部门管理',
+    },
+    {
+      icon: <FontSearch />,
+      title: '字典管理',
+    },
+    {
+      icon: <Config />,
+      title: '配置中心',
+    },
+  ];
+
   return (
-    <div className="grid grid-cols-4 gap-4">
-      {statisticItemList.map((item) => {
-        return (
-          <Card key={item.title}>
-            <StatisticItem
-              title={item.title}
-              value={item.value}
-              icon={item.icon}
-              suffix={item.suffix}
-              loading={loading}
-            />
-          </Card>
-        );
-      })}
-      <Card className="custom_card col-span-2" title="数仓分层统计">
-        <ReactECharts option={option1} style={{ height: 250 }} />
-      </Card>
-      <Card className="custom_card col-span-2" title="业务域分层统计">
-        <ReactECharts option={option2} style={{ height: 250 }} />
-      </Card>
-      <Card className="custom_card col-span-4" title="访问统计热度">
-        <Spin spinning={loading} style={{ width: '100%' }}>
-          <ReactECharts option={options} style={{ height: 400 }} />
-        </Spin>
-      </Card>
+    <div className="grid grid-cols-12 gap-4">
+      <div className="grid grid-cols-4 gap-4 col-span-9">
+        {statisticItemList.map((item) => {
+          return (
+            <Card key={item.title}>
+              <StatisticItem
+                title={item.title}
+                value={item.value}
+                icon={item.icon}
+                suffix={item.suffix}
+                loading={loading}
+              />
+            </Card>
+          );
+        })}
+        <Card className="custom_card col-span-2" title="数仓分层统计">
+          <ReactECharts option={leftBarOptions} style={{ height: 250 }} />
+        </Card>
+        <Card className="custom_card col-span-2" title="业务域分层统计">
+          <ReactECharts option={rightBarOptions} style={{ height: 250 }} />
+        </Card>
+        <Card className="custom_card col-span-4" title="访问统计热度">
+          <Spin spinning={loading} style={{ width: '100%' }}>
+            <ReactECharts option={lineOptions} style={{ height: 300 }} />
+          </Spin>
+        </Card>
+      </div>
+      <div className="flex flex-col gap-4 col-span-3">
+        <Card className="custom_card" title="快捷入口">
+          <div className="grid grid-cols-2 gap-3 whitespace-nowrap">
+            {quickList?.map((item, index) => (
+              <div
+                key={item.title}
+                className="flex_center gap-1 bg-slate-100 p-2 rounded-md"
+              >
+                <div
+                  className="text-[16px] px-1"
+                  style={{ color: ColorList[index]?.[5] }}
+                >
+                  {item.icon}
+                </div>
+                <div>{item.title}</div>
+              </div>
+            ))}
+          </div>
+        </Card>
+        <Card className="custom_card" title="通知公告">
+          <List
+            itemLayout="horizontal"
+            dataSource={new Array(6).fill(0)}
+            renderItem={(item, index) => (
+              <List.Item>
+                <List.Item.Meta
+                  avatar={
+                    <div className="w-8 h-8 space_center bg-slate-100 rounded-full">
+                      <MessageOne />
+                    </div>
+                  }
+                  title={<a href="">消息通知 {index}</a>}
+                  description="A design language for background applications, is refined by UED Team"
+                />
+              </List.Item>
+            )}
+          />
+        </Card>
+      </div>
     </div>
   );
 }
