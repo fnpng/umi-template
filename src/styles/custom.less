@@ -21,6 +21,23 @@
   }
 }
 
-.ant-page-header-no-children {
-  height: 2rem;
+// .ant-page-header-no-children {
+//   height: 2rem;
+// }
+
+.ant-tree-draggable-icon {
+  display: none;
+}
+
+.custom-list-tree {
+  .ant-tree-switcher {
+    width: 4px;
+    z-index: 2;
+    &::before {
+      left: -8px;
+    }
+  }
+  .ant-tree-treenode {
+    align-items: center;
+  }
 }

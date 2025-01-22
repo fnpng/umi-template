@@ -1,5 +1,6 @@
 import { Home } from '@icon-park/react';
 import React from 'react';
+import dataAnalysis from './data-analysis';
 import system from './system';
 
 export const routes: IBestAFSRoute[] = [
@@ -22,8 +23,8 @@ export const routes: IBestAFSRoute[] = [
     path: '/user-center',
     component: '@/pages/user-center',
   },
+  ...dataAnalysis,
   ...system,
-  // ...infra,
   { path: '/*', component: '@/pages/404' },
 ];
 

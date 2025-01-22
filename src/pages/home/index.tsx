@@ -260,7 +260,7 @@ export default function Metadata() {
   ];
 
   return (
-    <div className="grid grid-cols-12 gap-4">
+    <div className="grid grid-cols-12 gap-4 mt-2">
       <div className="grid grid-cols-4 gap-4 col-span-9">
         {statisticItemList.map((item) => {
           return (
