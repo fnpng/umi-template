@@ -48,11 +48,11 @@ export default function Index() {
       <div className="col-span-4 flex flex-col bg-white rounded-md space_center relative overflow-hidden">
         <img
           src={require('@/assets/avatar_bg.jpg')}
-          className="w-full h-[120px] object-cover absolute top-0 left-0 z-0 hue-rotate-[140deg]"
+          className="w-full h-[120px] object-cover absolute top-0 left-0 z-0 grayscale hue-rotate-[140deg]"
         />
         <Avatar
           size={72}
-          src={require('@/assets/avatar.png')}
+          src={require('@/assets/avatar.svg').default}
           className="mt-[80px]"
         />
         <div className="flex flex-col gap-4 w-full px-6 mt-3 pb-6">

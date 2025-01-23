@@ -1,4 +1,3 @@
-import avatar from '@/assets/avatar.png';
 import userStore from '@/store/user';
 import { Me, Power } from '@icon-park/react';
 import { useNavigate, useSnapshot } from '@umijs/max';
@@ -80,7 +79,10 @@ export const AvatarProps = () => {
           }}
         >
           <div className="space-x-1">
-            <Avatar size={36} src={avatar}></Avatar>
+            <Avatar
+              size={36}
+              src={require('@/assets/avatar.svg').default}
+            ></Avatar>
             {dom}
             {contextHolder}
           </div>

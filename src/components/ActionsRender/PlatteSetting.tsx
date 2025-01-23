@@ -148,6 +148,7 @@ export default function PlatteSetting({
                       '#2F54EB',
                       '#722ED1',
                       '#EB2F96',
+                      '#2b2b2b',
                     ],
                   },
                 ]}

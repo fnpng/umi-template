@@ -1,4 +1,4 @@
-import routes from '@/routes';
+import routes, { IBestAFSRoute } from '@/routes';
 import useSettings from '@/utils/useSettings';
 import { StyleProvider, px2remTransformer } from '@ant-design/cssinjs';
 import { LoadingFour } from '@icon-park/react';
@@ -32,6 +32,35 @@ export const layout = () => {
     title: settings.title,
     menu: {
       locale: false,
+      request: async () => {
+        function renameChildMenuListToRoutes(
+          tree: IBestAFSRoute[],
+        ): IBestAFSRoute[] {
+          return tree.map((node, index) => {
+            const newNode = {
+              ...node,
+              path: node?.path as string,
+              iconName: node.icon,
+              icon: node.icon ? (
+                <div
+                  className={
+                    node.path.split('/')?.length >= 3
+                      ? 'w-6 h-6 space_center rounded'
+                      : ''
+                  }
+                >
+                  {node.icon}
+                </div>
+              ) : undefined,
+              routes: node.routes
+                ? renameChildMenuListToRoutes(node.routes)
+                : undefined,
+            };
+            return newNode;
+          });
+        }
+        return renameChildMenuListToRoutes(routes);
+      },
     },
     layout: 'mix',
     splitMenus: true,
@@ -45,15 +74,9 @@ export const layout = () => {
     token: {
       bgLayout: 'rgba(242,243,245,1)',
       pageContainer: {
-        paddingBlockPageContainerContent: 16,
-        paddingInlinePageContainerContent: 24,
+        paddingBlockPageContainerContent: fullScreen ? 0 : 16,
+        paddingInlinePageContainerContent: fullScreen ? 0 : 24,
       },
-      // pageContainer: {
-      //   paddingBlockPageContainerContent:
-      //     fullScreen && !settings.hideNavbar ? 0 : 16,
-      //   paddingInlinePageContainerContent:
-      //     fullScreen && !settings.hideNavbar ? 0 : 24,
-      // },
       header: {
         colorBgHeader: '#fff',
         colorMenuBackground: '#fff',
