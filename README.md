@@ -5,7 +5,7 @@
 Create the project.
 
 ```
-npx degit PolarOS/umi-template project-name
+npx degit fnpng/umi-template project-name
 ```
 
 Access the project directory.
