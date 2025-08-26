@@ -4,7 +4,8 @@
   "menu": true,
   "footer": true,
   "breadcrumb": true,
-  "themeColor": "#2b2b2b",
+  "themeColor": "#722ed1",
+  "formStyle": "fill",
   "siderWidth": 240,
-  "copyright": "Copyright © 2022-2024"
+  "copyright": "Copyright © 2022-2025"
 }

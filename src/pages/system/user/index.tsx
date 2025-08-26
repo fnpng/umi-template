@@ -198,7 +198,7 @@ export default function WorkFlow() {
       <Search onSearch={onSearch} />
       <Card
         className="mt-4 custom_card"
-        bordered={false}
+        variant="borderless"
         title="用户列表"
         extra={
           <Button type="primary" onClick={() => onAdd()}>

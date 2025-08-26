@@ -20,7 +20,7 @@ export default function SearchCard({ ...props }) {
 
   return (
     <Card
-      bordered={false}
+      variant="borderless"
       className="custom_card custom_search_card"
       title={title}
     >

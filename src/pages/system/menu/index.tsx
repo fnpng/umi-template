@@ -108,7 +108,11 @@ export default function Index() {
             items={items}
             bordered
             column={1}
-            labelStyle={{ width: 160 }}
+            styles={{
+              label: {
+                width: 160,
+              },
+            }}
           />
         ) : (
           <Empty description="请先选择菜单" />

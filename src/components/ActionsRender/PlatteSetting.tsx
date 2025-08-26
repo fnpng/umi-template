@@ -11,6 +11,7 @@ import {
   Form,
   Input,
   InputNumber,
+  Radio,
   Switch,
 } from 'antd';
 import { ReactNode, useEffect, useState } from 'react';
@@ -156,6 +157,18 @@ export default function PlatteSetting({
                   setUserSettings({ themeColor: ev.toHexString() })
                 }
               />
+            </Form.Item>
+          </Block>
+          <Block title="表单风格">
+            <Form.Item name="formStyle" label="">
+              <Radio.Group
+                onChange={(ev) =>
+                  setUserSettings({ formStyle: ev.target.value })
+                }
+              >
+                <Radio value="linear">线性</Radio>
+                <Radio value="fill">填充</Radio>
+              </Radio.Group>
             </Form.Item>
           </Block>
           <Block

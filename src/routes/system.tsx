@@ -1,4 +1,9 @@
-import { ApplicationMenu, Peoples, SettingTwo } from '@icon-park/react';
+import {
+  ApplicationMenu,
+  ListView,
+  Peoples,
+  SettingTwo,
+} from '@icon-park/react';
 import React from 'react';
 import { IBestAFSRoute } from './index';
 
@@ -20,6 +25,12 @@ export default [
         name: '菜单管理',
         icon: <ApplicationMenu />,
         component: '@/pages/system/menu',
+      },
+      {
+        path: '/system/form-style',
+        name: '表单样式',
+        icon: <ListView />,
+        component: '@/pages/system/form-style',
       },
     ],
   },

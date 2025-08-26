@@ -1,17 +1,21 @@
 import routes, { IBestAFSRoute } from '@/routes';
 import useSettings from '@/utils/useSettings';
-import { StyleProvider, px2remTransformer } from '@ant-design/cssinjs';
 import { LoadingFour } from '@icon-park/react';
 import '@icon-park/react/styles/index.css';
 import { AxiosResponse, RequestConfig } from '@umijs/max';
-import { App, ConfigProvider, Spin } from 'antd';
-import zh_CN from 'antd/es/locale/zh_CN';
+import { App, Spin } from 'antd';
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
 import NProgress from 'nprogress';
 import { ActionsRender } from './components/ActionsRender';
 import AntdFeedback, { Message } from './components/AntdFeedback';
 import { AvatarProps } from './components/AvatarProps';
+import CustomConfigProvider from './CustomConfigProvider';
 import { userStore } from './store';
 import './styles/global.less';
+
+// 设置 dayjs 默认语言为中文
+dayjs.locale('zh-cn');
 
 Spin.setDefaultIndicator(<LoadingFour style={{ fontSize: 24 }} spin />);
 NProgress.configure({
@@ -33,7 +37,7 @@ export const layout = () => {
     menu: {
       locale: false,
       request: async () => {
-        function renameChildMenuListToRoutes(
+        function renameMenuListToRoutes(
           tree: IBestAFSRoute[],
         ): IBestAFSRoute[] {
           return tree.map((node, index) => {
@@ -53,13 +57,13 @@ export const layout = () => {
                 </div>
               ) : undefined,
               routes: node.routes
-                ? renameChildMenuListToRoutes(node.routes)
+                ? renameMenuListToRoutes(node.routes)
                 : undefined,
             };
             return newNode;
           });
         }
-        return renameChildMenuListToRoutes(routes);
+        return renameMenuListToRoutes(routes);
       },
     },
     layout: 'mix',
@@ -103,44 +107,26 @@ export const layout = () => {
 };
 
 export function rootContainer(container: React.ReactNode) {
-  const px2rem = px2remTransformer({
-    rootValue: 14, // 32px = 1rem; @default 16
-  });
   const containerBg = '#f3f4f6';
-
+  const themeColor = userStore.userSettings?.themeColor;
+  const formStyle = userStore.userSettings?.formStyle;
   const themeStyle = {
     colorBgContainer: containerBg,
     colorBorder: containerBg,
   };
+  // 在 JavaScript 中设置 CSS 变量
+  document.documentElement.style.setProperty(
+    '--theme-color',
+    `${themeColor}40` || '#ffffff',
+  );
+
   return (
-    <ConfigProvider
-      locale={zh_CN}
-      theme={{
-        token: {
-          colorPrimary: userStore.userSettings?.themeColor,
-          colorLink: userStore.userSettings?.themeColor,
-        },
-        components: {
-          Segmented: {
-            itemSelectedColor: userStore.userSettings?.themeColor,
-          },
-          Button: themeStyle,
-          DatePicker: themeStyle,
-          Input: themeStyle,
-          Select: themeStyle,
-          InputNumber: themeStyle,
-          Mentions: themeStyle,
-          ColorPicker: themeStyle,
-        },
-      }}
-    >
-      <StyleProvider transformers={[px2rem]}>
-        <App message={{ maxCount: 3 }}>
-          <AntdFeedback />
-          {container}
-        </App>
-      </StyleProvider>
-    </ConfigProvider>
+    <CustomConfigProvider>
+      <App message={{ maxCount: 3 }}>
+        <AntdFeedback />
+        {container}
+      </App>
+    </CustomConfigProvider>
   );
 }
 
