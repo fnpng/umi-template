@@ -1,5 +1,5 @@
-import { Home } from '@icon-park/react';
 import React from 'react';
+import { FcHome } from 'react-icons/fc';
 import system from './system';
 
 export const routes: IBestAFSRoute[] = [
@@ -13,17 +13,21 @@ export const routes: IBestAFSRoute[] = [
     layout: false,
   },
   {
+    path: '/login-center-layout',
+    component: '@/pages/login/login-center-layout',
+    layout: false,
+  },
+  {
     name: '首页',
     path: '/home',
     component: './home',
-    icon: <Home />,
+    icon: <FcHome size={20} />,
   },
   {
     path: '/user-center',
     component: '@/pages/user-center',
   },
   ...system,
-  // ...infra,
   { path: '/*', component: '@/pages/404' },
 ];
 

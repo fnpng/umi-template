@@ -1,9 +1,8 @@
-import getIconPark from '@/utils/getIconPark';
+import { renderIcon } from '@/components/IconSelect';
 import highlightText from '@/utils/highlightText';
-import { Search } from '@icon-park/react';
-import { IconType } from '@icon-park/react/es/all';
 import { Empty, Input, Spin, Tree } from 'antd';
 import { useEffect, useState } from 'react';
+import { RiSearchLine } from 'react-icons/ri';
 
 export function searchData(TreeData: AUTH.MenuDTO[], searchValue: string) {
   const loop = (data: AUTH.MenuDTO[]) => {
@@ -93,7 +92,7 @@ export default function FileTree({
           onSearch={(value) => setSearchValue(value)}
           onPressEnter={(e) => setSearchValue(e.currentTarget.value)}
           placeholder="请输入关键词搜索"
-          enterButton={<Search />}
+          enterButton={<RiSearchLine />}
         />
       </div>
       {loading ? (
@@ -118,7 +117,9 @@ export default function FileTree({
             titleRender={(nodeData) => {
               return (
                 <span className="space-x-1 whitespace-nowrap">
-                  {getIconPark(nodeData?.icon as IconType)}
+                  <span className="text-[15px]">
+                    {renderIcon(nodeData?.icon)}
+                  </span>
                   <span>
                     {highlightText(nodeData?.name as string, searchValue)}
                   </span>

@@ -1,20 +1,29 @@
 import userStore from '@/store/user';
-import { Me, Power } from '@icon-park/react';
 import { useNavigate, useSnapshot } from '@umijs/max';
 import { Avatar, Dropdown, Modal } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { BiLogOutCircle, BiUserCircle } from 'react-icons/bi';
+
+const getCurrentUser = async () => {
+  try {
+    const response = await fetch(`${process.env.API_URL}/userInfo`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return [];
+  }
+};
 
 export const AvatarProps = () => {
   const navigate = useNavigate();
-  const { userSettings, userInfo, setUserInfo } = useSnapshot(userStore);
-  const [visible, setVisible] = useState(false);
+  const { userInfo, setUserInfo } = useSnapshot(userStore);
   const [modal, contextHolder] = Modal.useModal();
 
   const getUserInfo = async () => {
-    // const res = await getCurrentUser();
-    // if (res.code === 200) {
-    //   setUserInfo((res?.data as AUTH.UserDTO) || {});
-    // }
+    const res = await getCurrentUser();
+    if (res.code === 200) {
+      setUserInfo(res?.data || {});
+    }
   };
 
   useEffect(() => {
@@ -47,7 +56,6 @@ export const AvatarProps = () => {
 
   const handleLogout = () => {
     navigate('/login');
-    setVisible(false);
     localStorage.removeItem('token');
     localStorage.removeItem('userInfo');
   };
@@ -63,7 +71,7 @@ export const AvatarProps = () => {
             items: [
               {
                 key: 'user-center',
-                icon: <Me size={16} />,
+                icon: <BiUserCircle size={18} />,
                 label: '个人中心',
               },
               {
@@ -71,18 +79,15 @@ export const AvatarProps = () => {
               },
               {
                 key: 'logout',
-                icon: <Power size={16} />,
+                icon: <BiLogOutCircle size={18} />,
                 label: '退出登录',
               },
             ],
             onClick,
           }}
         >
-          <div className="space-x-1">
-            <Avatar
-              size={36}
-              src={require('@/assets/avatar.svg').default}
-            ></Avatar>
+          <div className="space-x-1 !text-slate-500">
+            <Avatar size={36} src={require('@/assets/avatar.png')}></Avatar>
             {dom}
             {contextHolder}
           </div>

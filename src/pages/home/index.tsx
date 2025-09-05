@@ -1,64 +1,48 @@
-import { ColorList, getGradientColor } from '@/utils/useColor';
-import {
-  Announcement,
-  Avatar,
-  Bookshelf,
-  Config,
-  FileWord,
-  FontSearch,
-  IdCard,
-  Me,
-  Message,
-  MessageOne,
-  UpTwo,
-  WaterfallsV,
-} from '@icon-park/react';
-import { Card, List, Skeleton, Spin, Statistic } from 'antd';
+import { getGradientColor } from '@/utils/useColor';
+import { Button, Card, Divider, Input, Segmented, Spin } from 'antd';
 import ReactECharts from 'echarts-for-react';
-import Mock from 'mockjs';
 import React, { useEffect } from 'react';
+import { AiFillFire, AiFillStar } from 'react-icons/ai';
+import { BiSolidChart } from 'react-icons/bi';
+import { CiCircleMore } from 'react-icons/ci';
+import { FaEye } from 'react-icons/fa';
+import { FiSearch } from 'react-icons/fi';
+import { PiListNumbersFill } from 'react-icons/pi';
 
-const year = new Date().getFullYear();
-const getLineData = () => {
-  return new Array(12).fill(0).map((_item, index) => ({
-    date: `${year}-${index + 1}`,
-    count: Mock.Random.natural(20000, 75000),
-  }));
+const getTrendChartData = async () => {
+  try {
+    const response = await fetch(`${process.env.API_URL}/trendChart`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return [];
+  }
 };
 
 export default function Metadata() {
-  const [data, setData] = React.useState({
-    allContents: '2735',
-    increaseComments: '1874',
-    liveContents: '88',
-    growthRate: '2.8%',
-    chartData: getLineData(),
-  });
+  const [trendChartData, setTrendChartData] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState(false);
 
-  const getOverviewData = async () => {
-    setLoading(true);
-    // const res = await API.overview({});
-    // setData(res.data);
-    setLoading(false);
-  };
-
   useEffect(() => {
-    getOverviewData();
+    setLoading(true);
+    getTrendChartData().then((res) => {
+      setTrendChartData(res);
+    });
+    setLoading(false);
   }, []);
 
   const lineOptions = {
-    grid: { top: 8, right: 8, bottom: 24, left: 50 },
+    grid: { top: 8, right: 0, bottom: 24, left: 40 },
     xAxis: {
       type: 'category',
-      data: data?.chartData?.map((item) => item.date),
+      data: trendChartData?.map((item) => item.date),
     },
     yAxis: {
       type: 'value',
     },
     series: [
       {
-        data: data?.chartData?.map((item) => item.count),
+        data: trendChartData?.map((item) => item.count),
         type: 'line',
         smooth: true,
         symbol: 'none',
@@ -80,250 +64,197 @@ export default function Metadata() {
     },
   };
 
-  const StatisticItem = ({
-    title,
-    value,
-    icon,
-    suffix,
-    loading,
-  }: {
-    title: string;
-    value: string;
-    icon: React.ReactNode;
-    suffix: React.ReactNode;
-    loading: boolean;
-  }) => {
-    return (
-      <div className="flex items-center">
-        <div className="h-16 w-16 flex justify-center items-center bg-slate-50 rounded-full mr-6">
-          {icon}
-        </div>
-        <Skeleton loading={loading}>
-          <Statistic title={title} value={value} suffix={suffix} />
-        </Skeleton>
-      </div>
-    );
-  };
-
-  const statisticItemList = [
+  const list = [
     {
-      title: '指标总数',
-      value: data.allContents,
-      icon: <WaterfallsV theme="filled" size="32" fill={ColorList[0][5]} />,
-      suffix: '个',
+      key: '1',
+      name: '销售额 (sales_revenue)',
+      time: '2024-03-01',
+      count: 689,
     },
     {
-      title: '质量监控',
-      value: data.increaseComments,
-      icon: <Announcement theme="filled" size="32" fill={ColorList[1][5]} />,
-      suffix: '个',
+      key: '2',
+      name: '客单价 (average_order_value)',
+      time: '2024-09-03',
+      count: 560,
     },
     {
-      title: '增长速率',
-      value: data.growthRate,
-      icon: <Bookshelf theme="filled" size="32" fill={ColorList[4][5]} />,
-      suffix: <UpTwo theme="filled" size="24" fill="#0fbf60" />,
+      key: '3',
+      name: '订单量 (order_count)',
+      time: '2024-08-03',
+      count: 517,
     },
     {
-      title: '总体评分',
-      value: data.liveContents,
-      icon: <FileWord theme="filled" size="32" fill={ColorList[3][5]} />,
-      suffix: '分',
-    },
-  ];
-
-  const leftBarOptions = {
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'cross',
-        crossStyle: {
-          color: '#999',
-        },
-      },
-    },
-    dataset: [
-      {
-        dimensions: ['name', 'score', 'date'],
-        source: [
-          ['RAW', 101, '2011-02-12'],
-          ['RFN', 83, '2011-03-01'],
-          ['AST', 154, '2011-02-14'],
-          ['SRV', 25, '2011-04-02'],
-          ['OTHER', 69, '2011-04-02'],
-        ],
-      },
-      {
-        transform: {
-          type: 'sort',
-          config: { dimension: 'score', order: 'desc' },
-        },
-      },
-    ],
-    grid: {
-      top: 8,
-      right: 8,
-      bottom: 30,
-      left: 36,
-    },
-    xAxis: {
-      type: 'category',
-      axisLabel: { interval: 0 },
-    },
-    yAxis: {},
-    series: {
-      type: 'bar',
-      encode: { x: 'name', y: 'score' },
-      datasetIndex: 1,
-      barWidth: 30,
-      itemStyle: {
-        color: getGradientColor(['#3b82f6', '#7dd3fc30']),
-      },
-    },
-  };
-
-  const rightBarOptions = {
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'cross',
-        crossStyle: {
-          color: '#999',
-        },
-      },
-    },
-    dataset: [
-      {
-        dimensions: ['name', 'score', 'date'],
-        source: [
-          ['ACCOUNT', 40, '2011-02-12'],
-          ['PRODUCT', 30, '2011-03-01'],
-          ['SELL', 95, '2011-02-14'],
-          ['STORE', 30, '2011-04-02'],
-          ['OTHER', 69, '2011-04-02'],
-        ],
-      },
-      {
-        transform: {
-          type: 'sort',
-          config: { dimension: 'score', order: 'desc' },
-        },
-      },
-    ],
-    grid: {
-      top: 8,
-      right: 8,
-      bottom: 30,
-      left: 36,
-    },
-    xAxis: {
-      type: 'category',
-      axisLabel: { interval: 0 },
-    },
-    yAxis: {},
-    series: {
-      type: 'bar',
-      encode: { x: 'name', y: 'score' },
-      datasetIndex: 1,
-      barWidth: 30,
-      itemStyle: {
-        color: getGradientColor(['#f87171', '#fed7aa30']),
-      },
-    },
-  };
-
-  const quickList = [
-    {
-      icon: <Me />,
-      title: '用户管理',
+      key: '4',
+      name: '订单金额 (order_amount)',
+      time: '2024-07-03',
+      count: 479,
     },
     {
-      icon: <Avatar />,
-      title: '角色管理',
+      key: '5',
+      name: '页面浏览量 (page_view)',
+      time: '2024-06-03',
+      count: 457,
     },
     {
-      icon: <Message />,
-      title: '消息通知',
-    },
-    {
-      icon: <IdCard />,
-      title: '部门管理',
-    },
-    {
-      icon: <FontSearch />,
-      title: '字典管理',
-    },
-    {
-      icon: <Config />,
-      title: '配置中心',
+      key: '6',
+      name: '用户访问量 (user_visits)',
+      time: '2024-05-03',
+      count: 374,
     },
   ];
 
   return (
-    <div className="grid grid-cols-12 gap-4 mt-2">
-      <div className="grid grid-cols-4 gap-4 col-span-9">
-        {statisticItemList.map((item) => {
-          return (
-            <Card key={item.title}>
-              <StatisticItem
-                title={item.title}
-                value={item.value}
-                icon={item.icon}
-                suffix={item.suffix}
-                loading={loading}
-              />
-            </Card>
-          );
-        })}
-        <Card className="custom_card col-span-2" title="数仓分层统计">
-          <ReactECharts option={leftBarOptions} style={{ height: 250 }} />
+    <div className="-mt-[16px] -mx-[24px]">
+      <div className="relative h-[240px] space_center">
+        <img
+          src={require('@/assets/search_bg.jpg')}
+          alt="home_bg"
+          className="absolute top-0 left-0 w-full h-full object-cover opacity-70"
+        />
+        <div className="z-10 flex_center flex-col">
+          <Input
+            placeholder="请输入指标搜索"
+            size="large"
+            style={{
+              width: '600px',
+              backgroundColor: 'rgba(255, 255, 255, 1)',
+            }}
+            prefix={<FiSearch />}
+            suffix={<Button type="primary">搜索</Button>}
+          />
+          <div className="flex items-center gap-2 mt-4 text-slate-600">
+            <span>所有指标：998个</span>
+            <Divider type="vertical" />
+            <span>原子指标：775个</span>
+            <Divider type="vertical" />
+            <span>派生指标：123个</span>
+            <Divider type="vertical" />
+            <span>复合指标：100个</span>
+          </div>
+        </div>
+      </div>
+      <div className="p-4 -mt-[56px] grid grid-cols-12 gap-4">
+        <Card
+          className="custom_card col-span-4"
+          title={
+            <div className="flex items-center gap-1">
+              <AiFillFire className="text-red-500 text-[20px]" /> 热门指标
+            </div>
+          }
+          extra={
+            <a className="flex_center gap-1">
+              <CiCircleMore size={18} /> 更多
+            </a>
+          }
+        >
+          <div className="grid grid-cols-2 gap-4">
+            {new Array(8).fill(0).map((item, index) => (
+              <div key={index} className="bg-slate-100 p-2 rounded-md"></div>
+            ))}
+          </div>
         </Card>
-        <Card className="custom_card col-span-2" title="业务域分层统计">
-          <ReactECharts option={rightBarOptions} style={{ height: 250 }} />
+        <Card
+          className="custom_card col-span-4"
+          title={
+            <div className="flex items-center gap-1">
+              <FaEye className="text-indigo-500 text-[20px]" /> 我浏览的
+            </div>
+          }
+          extra={
+            <a className="flex_center gap-1">
+              <CiCircleMore size={18} /> 更多
+            </a>
+          }
+        >
+          <div className="grid grid-cols-2 gap-4">
+            {new Array(7).fill(0).map((item, index) => (
+              <div key={index} className="bg-slate-100 p-2 rounded-md"></div>
+            ))}
+          </div>
         </Card>
-        <Card className="custom_card col-span-4" title="访问统计热度">
+        <Card
+          className="custom_card col-span-4"
+          title={
+            <div className="flex items-center gap-1">
+              <AiFillStar className="text-orange-500 text-[20px]" /> 我收藏的
+            </div>
+          }
+          extra={
+            <a className="flex_center gap-1">
+              <CiCircleMore size={18} /> 更多
+            </a>
+          }
+        >
+          <div className="grid grid-cols-2 gap-4">
+            {new Array(7).fill(0).map((item, index) => (
+              <div key={index} className="bg-slate-100 p-2 rounded-md"></div>
+            ))}
+          </div>
+        </Card>
+
+        <Card
+          className="custom_card col-span-8"
+          title={
+            <div className="flex items-center gap-1">
+              <BiSolidChart size={20} className="text-blue-500" />
+              指标访问量趋势
+            </div>
+          }
+          extra={<Segmented options={['最近一年', '最近30天', '最近7天']} />}
+        >
           <Spin spinning={loading} style={{ width: '100%' }}>
             <ReactECharts option={lineOptions} style={{ height: 300 }} />
           </Spin>
         </Card>
-      </div>
-      <div className="flex flex-col gap-4 col-span-3">
-        <Card className="custom_card" title="快捷入口">
-          <div className="grid grid-cols-2 gap-3 whitespace-nowrap">
-            {quickList?.map((item, index) => (
+        <Card
+          className="custom_card col-span-4"
+          title={
+            <div className="flex items-center gap-1">
+              <PiListNumbersFill size={20} className="text-red-500" />
+              指标动态
+            </div>
+          }
+          extra={
+            <a className="flex_center gap-1">
+              <CiCircleMore size={18} /> 更多
+            </a>
+          }
+        >
+          <div className="flex flex-col gap-2 -mt-1">
+            {list.map((item, index) => (
               <div
-                key={item.title}
-                className="flex_center gap-1 bg-slate-100 p-2 rounded-md"
+                key={index}
+                className={`p-3 rounded-md ${
+                  index % 2 === 0 ? 'bg-slate-100' : ''
+                }`}
               >
-                <div
-                  className="text-[16px] px-1"
-                  style={{ color: ColorList[index]?.[5] }}
-                >
-                  {item.icon}
+                <div className="space_between">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`w-5 h-5 space_center rounded-full text-white ${
+                        index === 0
+                          ? 'bg-red-500'
+                          : index === 1
+                          ? 'bg-orange-500'
+                          : index === 2
+                          ? 'bg-indigo-500'
+                          : 'bg-slate-500'
+                      }`}
+                    >
+                      {index + 1}
+                    </span>
+                    <span className="text-indigo-500 font-bold">
+                      {item.name}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-4 text-gray-600">
+                    <span>发布时间: {item.time}</span>
+                    <span>访问量: {item.count}</span>
+                  </div>
                 </div>
-                <div>{item.title}</div>
               </div>
             ))}
           </div>
-        </Card>
-        <Card className="custom_card" title="通知公告">
-          <List
-            itemLayout="horizontal"
-            dataSource={new Array(6).fill(0)}
-            renderItem={(item, index) => (
-              <List.Item>
-                <List.Item.Meta
-                  avatar={
-                    <div className="w-8 h-8 space_center bg-slate-100 rounded-full">
-                      <MessageOne />
-                    </div>
-                  }
-                  title={<a href="">消息通知 {index}</a>}
-                  description="A design language for background applications, is refined by UED Team"
-                />
-              </List.Item>
-            )}
-          />
         </Card>
       </div>
     </div>

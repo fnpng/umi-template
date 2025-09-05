@@ -1,12 +1,12 @@
 import routes, { IBestAFSRoute } from '@/routes';
 import useSettings from '@/utils/useSettings';
-import { LoadingFour } from '@icon-park/react';
-import '@icon-park/react/styles/index.css';
 import { AxiosResponse, RequestConfig } from '@umijs/max';
 import { App, Spin } from 'antd';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import NProgress from 'nprogress';
+import { IconContext } from 'react-icons';
+import { BiLoaderAlt } from 'react-icons/bi';
 import { ActionsRender } from './components/ActionsRender';
 import AntdFeedback, { Message } from './components/AntdFeedback';
 import { AvatarProps } from './components/AvatarProps';
@@ -17,7 +17,9 @@ import './styles/global.less';
 // 设置 dayjs 默认语言为中文
 dayjs.locale('zh-cn');
 
-Spin.setDefaultIndicator(<LoadingFour style={{ fontSize: 24 }} spin />);
+Spin.setDefaultIndicator(
+  <BiLoaderAlt style={{ fontSize: 24 }} className="animate-spin " />,
+);
 NProgress.configure({
   showSpinner: false,
 });
@@ -49,7 +51,7 @@ export const layout = () => {
                 <div
                   className={
                     node.path.split('/')?.length >= 3
-                      ? 'w-6 h-6 space_center rounded'
+                      ? 'w-6 h-6 space_center rounded bg-slate-100'
                       : ''
                   }
                 >
@@ -107,13 +109,7 @@ export const layout = () => {
 };
 
 export function rootContainer(container: React.ReactNode) {
-  const containerBg = '#f3f4f6';
   const themeColor = userStore.userSettings?.themeColor;
-  const formStyle = userStore.userSettings?.formStyle;
-  const themeStyle = {
-    colorBgContainer: containerBg,
-    colorBorder: containerBg,
-  };
   // 在 JavaScript 中设置 CSS 变量
   document.documentElement.style.setProperty(
     '--theme-color',
@@ -122,10 +118,12 @@ export function rootContainer(container: React.ReactNode) {
 
   return (
     <CustomConfigProvider>
-      <App message={{ maxCount: 3 }}>
-        <AntdFeedback />
-        {container}
-      </App>
+      <IconContext.Provider value={{ className: 'react-icons' }}>
+        <App message={{ maxCount: 3 }}>
+          <AntdFeedback />
+          {container}
+        </App>
+      </IconContext.Provider>
     </CustomConfigProvider>
   );
 }

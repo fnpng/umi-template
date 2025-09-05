@@ -1,10 +1,15 @@
-import getIconPark from '@/utils/getIconPark';
-import { Api, Delete, Edit } from '@icon-park/react';
-import { IconType } from '@icon-park/react/es/all';
+import { renderIcon } from '@/components/IconSelect';
 import { Button, Card, Descriptions, DescriptionsProps, Empty } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { MdAddCircle } from 'react-icons/md';
 import AddEditModal from './components/add-edit-modal';
 import MenuTree from './components/menu-tree';
+
+const getMenus = async () => {
+  const response = await fetch(`${process.env.API_URL}/menus`);
+  const data = await response.json();
+  return data;
+};
 
 export default function Index() {
   const [record, setRecord] = useState<any>({
@@ -31,7 +36,9 @@ export default function Index() {
       label: 'icon',
       children: (
         <>
-          {getIconPark(record?.icon as IconType)} {record?.icon}
+          {/* {getIconPark(record?.icon as IconType)}{' '} */}
+          <span className="text-[15px]">{renderIcon(record?.icon)} </span>
+          {record?.icon}
         </>
       ),
     },
@@ -42,25 +49,19 @@ export default function Index() {
     },
     {
       key: 'order',
-      label: '排序号',
+      label: '序号',
       children: record?.order,
     },
-    {
-      key: 'canSearch',
-      label: '允许搜索',
-      children: record?.canSearch ? '开启' : '关闭',
-    },
-    {
-      key: 'canCollect',
-      label: '允许收藏',
-      children: record?.canCollect ? '开启' : '关闭',
-    },
-    {
-      key: 'collectTargetMenuName',
-      label: '收藏目录菜单',
-      children: record?.collectTargetMenuName,
-    },
   ];
+
+  const getList = async () => {
+    const data = await getMenus();
+    setAllTreeData(data);
+  };
+
+  useEffect(() => {
+    getList();
+  }, []);
 
   return (
     <div className="grid grid-cols-3 gap-3">
@@ -75,7 +76,7 @@ export default function Index() {
               setVisible(true);
             }}
           >
-            + 新增
+            <MdAddCircle /> 新增
           </Button>
         }
       >
@@ -91,14 +92,12 @@ export default function Index() {
         title="菜单详情"
         extra={
           <div className="space-x-2">
-            <Button type="primary">
-              <Api /> 绑定接口
+            <Button type="primary">绑定用户</Button>
+            <Button type="primary" ghost>
+              编辑
             </Button>
-            <Button>
-              <Edit /> 编辑
-            </Button>
-            <Button>
-              <Delete /> 删除
+            <Button danger ghost>
+              删除
             </Button>
           </div>
         }

@@ -7,7 +7,9 @@ export default defineConfig({
   proxy,
   layout: {},
   routes,
-  define: {},
+  define: {
+    'process.env': process.env,
+  },
   npmClient: 'pnpm',
   request: {},
   valtio: {},

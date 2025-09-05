@@ -2,11 +2,11 @@ import { Message } from '@/components/AntdFeedback';
 import {
   Button,
   Card,
+  Divider,
   PaginationProps,
   Popconfirm,
   Table,
   Tag,
-  Typography,
 } from 'antd';
 import { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import dayjs from 'dayjs';
@@ -14,9 +14,13 @@ import { useEffect, useState } from 'react';
 import AddEditModal from './components/add-edit-modal';
 import Search from './components/search';
 
-const { Link } = Typography;
+const getUsers = async () => {
+  const response = await fetch(`${process.env.API_URL}/users`);
+  const data = await response.json();
+  return data;
+};
 
-export default function WorkFlow() {
+export default function UsersList() {
   const [list, setList] = useState<[]>([]);
   const [pagination, setPagination] = useState<PaginationProps>({
     total: 0,
@@ -27,7 +31,9 @@ export default function WorkFlow() {
   const [visible, setVisible] = useState(false);
   const [modalInfo, setModalInfo] = useState({
     mode: 'add' as 'add' | 'edit',
-    record: null,
+    record: {
+      id: '',
+    },
   });
 
   const columns: ColumnsType<Record<string, unknown>> = [
@@ -42,12 +48,8 @@ export default function WorkFlow() {
       },
     },
     {
-      title: '用户ID',
-      dataIndex: 'userId',
-    },
-    {
       title: '用户名',
-      dataIndex: 'userName',
+      dataIndex: 'name',
     },
     {
       title: '昵称',
@@ -67,7 +69,7 @@ export default function WorkFlow() {
       width: 80,
       align: 'center',
       render: (text) => {
-        return text === 1 ? (
+        return text === 'ACTIVE' ? (
           <Tag color="success">启用中</Tag>
         ) : (
           <Tag color="error">禁用中</Tag>
@@ -94,26 +96,33 @@ export default function WorkFlow() {
       title: '操作',
       dataIndex: 'operation',
       align: 'center',
-      width: 160,
+      width: 200,
       render: (text, record) => {
-        const { status, userId } = record;
+        const { status } = record;
         return (
-          <div className="space-x-3">
-            <Link onClick={() => onEdit(record)}>编辑</Link>
-            <Link
-              onClick={() => {
-                const newList = [...list];
-                Message.success('操作成功');
-              }}
+          <div className="space-x-2">
+            <a onClick={() => onEdit(record)}>编辑</a>
+            <Divider type="vertical" />
+            <Popconfirm
+              title="确定启用吗？"
+              placement="topRight"
+              onConfirm={() => onStatus(record)}
             >
-              {status === 1 ? '启用' : '禁用'}
-            </Link>
+              <a
+                className={
+                  status === 'ACTIVE' ? 'text-red-500' : 'text-green-500'
+                }
+              >
+                {status === 'ACTIVE' ? '禁用' : '启用'}
+              </a>
+            </Popconfirm>
+            <Divider type="vertical" />
             <Popconfirm
               title="确定删除吗？"
               placement="topRight"
               onConfirm={() => onDelete(record)}
             >
-              <Link type="danger">删除</Link>
+              <a className="text-red-500">删除</a>
             </Popconfirm>
           </div>
         );
@@ -124,14 +133,8 @@ export default function WorkFlow() {
   const getList = async (params = {}) => {
     setLoading(true);
     try {
-      // const {
-      //   data: { total, current, pageSize, list },
-      // } = await API.getUserList({
-      //   ...pagination,
-      //   ...params,
-      // });
-      setList(list || []);
-      // setPagination({ ...pagination, total, current, pageSize });
+      const data = await getUsers();
+      setList(data);
     } finally {
       setLoading(false);
     }
@@ -144,7 +147,9 @@ export default function WorkFlow() {
   const onAdd = () => {
     setModalInfo({
       mode: 'add',
-      record: null,
+      record: {
+        id: '',
+      },
     });
     setVisible(true);
   };
@@ -157,12 +162,12 @@ export default function WorkFlow() {
     setVisible(true);
   };
 
-  const onDelete = async ({ userId }: any) => {
-    // const res = await API.deleteUserById({ userId });
-    // if (res.code === 200) {
-    //   Message.success('删除成功');
-    //   getList();
-    // }
+  const onDelete = async ({ id }: any) => {
+    const res = await fetch(`${process.env.API_URL}/users/${id}`, {
+      method: 'DELETE',
+    });
+    Message.success('删除成功');
+    getList();
   };
 
   const onSearch = (values: Record<string, unknown>) => {
@@ -193,6 +198,35 @@ export default function WorkFlow() {
     },
   };
 
+  const handleOk = async (values: Record<string, unknown>) => {
+    if (modalInfo.mode === 'add') {
+      await fetch(`${process.env.API_URL}/users`, {
+        method: 'POST',
+        body: JSON.stringify({ ...values, status: 'ACTIVE' }),
+      });
+    } else {
+      await fetch(`${process.env.API_URL}/users/${modalInfo.record?.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ ...values, id: modalInfo.record?.id }),
+      });
+    }
+    Message.success('操作成功');
+    setVisible(false);
+    getList();
+  };
+
+  const onStatus = async (record: any) => {
+    await fetch(`${process.env.API_URL}/users/${record?.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        ...record,
+        status: record.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE',
+      }),
+    });
+    Message.success('操作成功');
+    getList();
+  };
+
   return (
     <div className="">
       <Search onSearch={onSearch} />
@@ -207,7 +241,7 @@ export default function WorkFlow() {
         }
       >
         <Table
-          rowKey="userId"
+          rowKey="id"
           columns={columns}
           dataSource={list}
           bordered
@@ -219,11 +253,7 @@ export default function WorkFlow() {
       {visible && (
         <AddEditModal
           modalInfo={modalInfo}
-          onOk={(values) => {
-            setVisible(false);
-            Message.success('操作成功');
-            getList();
-          }}
+          onOk={handleOk}
           onCancel={() => setVisible(false)}
         />
       )}

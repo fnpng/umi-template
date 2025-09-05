@@ -39,8 +39,8 @@
 
 ```bash
 # 克隆项目
-git clone <your-repo-url>
-cd umi-template
+npx degit fnpng/umi-template project-name
+cd project-name
 
 # 安装依赖
 pnpm install

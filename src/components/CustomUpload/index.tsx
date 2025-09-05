@@ -1,5 +1,5 @@
-import { UploadOne } from '@icon-park/react';
 import { Upload } from 'antd';
+import { RiUploadCloudLine } from 'react-icons/ri';
 
 export default function CustomUpload({
   title = '上传图片',
@@ -12,7 +12,7 @@ export default function CustomUpload({
       action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
     >
       <div className="space_center flex-col text-sm gap-1 text-gray-400">
-        <UploadOne size={32} strokeWidth={3} />
+        <RiUploadCloudLine size={32} />
         <span className="text-base">{title}</span>
         <span>{subText}</span>
       </div>

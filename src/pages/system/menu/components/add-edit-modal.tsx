@@ -1,19 +1,16 @@
-import getIconPark from '@/utils/getIconPark';
+import IconSelect from '@/components/IconSelect';
 import { extractProperties } from '@/utils/transformKeys';
-import { Info } from '@icon-park/react';
-import { ALL_ICON_KEYS } from '@icon-park/react/es/all';
 import {
-  ColorPicker,
   Form,
   Input,
   InputNumber,
   Modal,
   Radio,
-  Select,
   Tooltip,
   TreeSelect,
 } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { BsInfoCircle } from 'react-icons/bs';
 
 function filterTree(tree: AUTH.MenuDTO[], idToRemove: string): AUTH.MenuDTO[] {
   return tree.reduce<AUTH.MenuDTO[]>((acc, node) => {
@@ -44,13 +41,13 @@ export default function AddEditModal({
   onCancel: () => void;
 }) {
   const [form] = Form.useForm();
-  const [isCanCollect, setIsCanCollect] = useState(false);
-  const [iconProps, setIconProps] = useState({
-    theme: 'outline',
-    fill: '#ffffff',
-    background: '#2b2b2b',
-    round: false,
-  });
+  // const [isCanCollect, setIsCanCollect] = useState(false);
+  // const [iconProps, setIconProps] = useState({
+  //   theme: 'outline',
+  //   fill: '#ffffff',
+  //   background: '#2b2b2b',
+  //   round: false,
+  // });
 
   const handleOk = () => {
     form.validateFields().then(async (values) => {
@@ -58,9 +55,9 @@ export default function AddEditModal({
     });
   };
 
-  const canCollectChange = (val: boolean) => {
-    setIsCanCollect(val);
-  };
+  // const canCollectChange = (val: boolean) => {
+  //   setIsCanCollect(val);
+  // };
 
   useEffect(() => {
     form.setFieldsValue({
@@ -117,9 +114,13 @@ export default function AddEditModal({
             filterTreeNode={(input, treeNode) => {
               return treeNode?.name.includes(input);
             }}
-            dropdownStyle={{
-              maxHeight: 400,
-              overflow: 'auto',
+            styles={{
+              popup: {
+                root: {
+                  maxHeight: 400,
+                  overflow: 'auto',
+                },
+              },
             }}
             placeholder="请选择上级菜单"
             allowClear
@@ -146,7 +147,8 @@ export default function AddEditModal({
               <Input placeholder="请输入" />
             </Form.Item>
             <Form.Item label="菜单图标" name="icon">
-              <Select
+              <IconSelect />
+              {/* <Select
                 placeholder="请搜索选择"
                 suffixIcon={
                   <a
@@ -181,7 +183,7 @@ export default function AddEditModal({
                   ),
                   value: item,
                 }))}
-                dropdownRender={(menu) => (
+                popupRender={(menu) => (
                   <div>
                     <div className="mb-2 flex gap-4">
                       <div className="space-y-1">
@@ -301,7 +303,7 @@ export default function AddEditModal({
                     {menu}
                   </div>
                 )}
-              />
+              /> */}
             </Form.Item>
           </>
         )}
@@ -328,7 +330,7 @@ export default function AddEditModal({
             <>
               显示状态
               <Tooltip title="在菜单中隐藏自己和子节点，选择隐藏时，路由将不会出现在侧边栏，但仍然可以访问">
-                <Info className="ml-1" />
+                <BsInfoCircle className="ml-1" />
               </Tooltip>
             </>
           }

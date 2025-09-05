@@ -1,21 +1,20 @@
-import {
-  CalendarDot,
-  Mail,
-  Me,
-  People,
-  Phone,
-  ShieldAdd,
-  Time,
-  Workbench,
-} from '@icon-park/react';
 import { Avatar, Button, Divider, Form, Input, Segmented, Tag } from 'antd';
 import { useState } from 'react';
+import { BiSolidShieldPlus, BiSolidUser } from 'react-icons/bi';
+import {
+  FcCalendar,
+  FcFeedback,
+  FcIphone,
+  FcPlanner,
+  FcPodiumWithSpeaker,
+  FcVoicePresentation,
+} from 'react-icons/fc';
 
-export default function Index() {
+export default function UserCenter() {
   const userInfoList = [
-    { key: '用户名称', value: 'admin', icon: <Me /> },
-    { key: '手机号码', value: '188****9088', icon: <Phone /> },
-    { key: '电子邮箱', value: '188****9088@qq.com', icon: <Mail /> },
+    { key: '用户名称', value: 'admin', icon: <FcPodiumWithSpeaker /> },
+    { key: '手机号码', value: '188****9088', icon: <FcIphone /> },
+    { key: '电子邮箱', value: '188****9088@gmail.com', icon: <FcFeedback /> },
     {
       key: '账户状态',
       value: (
@@ -23,14 +22,10 @@ export default function Index() {
           正常
         </Tag>
       ),
-      icon: <Workbench />,
+      icon: <FcVoicePresentation />,
     },
-    { key: '注册时间', value: '2021-08-01 12:00:00', icon: <Time /> },
-    {
-      key: '最后登录时间',
-      value: '2021-08-01 12:00:00',
-      icon: <CalendarDot />,
-    },
+    { key: '注册时间', value: '2021-08-01 12:00:00', icon: <FcPlanner /> },
+    { key: '最后登录时间', value: '2021-08-01 12:00:00', icon: <FcCalendar /> },
   ];
 
   const [form] = Form.useForm();
@@ -47,19 +42,22 @@ export default function Index() {
     <div className="grid grid-cols-12 gap-4">
       <div className="col-span-4 flex flex-col bg-white rounded-md space_center relative overflow-hidden">
         <img
-          src={require('@/assets/avatar_bg.jpg')}
-          className="w-full h-[120px] object-cover absolute top-0 left-0 z-0 grayscale hue-rotate-[140deg]"
+          src={require('@/assets/light_bg.jpg')}
+          className="w-full h-[120px] object-cover absolute top-0 left-0 z-0"
         />
         <Avatar
           size={72}
-          src={require('@/assets/avatar.svg').default}
-          className="mt-[80px]"
+          src={require('@/assets/avatar.png')}
+          className="mt-[80px] shadow-md"
         />
         <div className="flex flex-col gap-4 w-full px-6 mt-3 pb-6">
           {userInfoList.map((item) => (
             <div className="space_between" key={item.key}>
               <span className="flex_center gap-1">
-                <span className="text-[16px]">{item.icon}</span> {item.key}
+                <span className="text-[18px] flex_center bg-slate-100 p-1 rounded">
+                  {item.icon}
+                </span>{' '}
+                {item.key}
               </span>
               <span>{item.value}</span>
             </div>
@@ -72,8 +70,16 @@ export default function Index() {
           value={segmentedValue}
           onChange={(value) => setSegmentedValue(value)}
           options={[
-            { label: '基本资料', value: 'baseInfo', icon: <People /> },
-            { label: '修改密码', value: 'security', icon: <ShieldAdd /> },
+            {
+              label: '基本资料',
+              value: 'baseInfo',
+              icon: <BiSolidUser size={18} />,
+            },
+            {
+              label: '修改密码',
+              value: 'security',
+              icon: <BiSolidShieldPlus size={18} />,
+            },
           ]}
         />
         {

@@ -1,7 +1,24 @@
+import { useNavigate } from '@umijs/max';
 import { Tooltip } from 'antd';
+import { TbChartDonutFilled } from 'react-icons/tb';
+
+function Dashboard() {
+  const navigate = useNavigate();
+
+  return (
+    <div
+      onClick={() => {
+        navigate('/dashboard/data-asset');
+      }}
+      className="flex_center"
+    >
+      <TbChartDonutFilled />
+    </div>
+  );
+}
 
 export function ActionsRender() {
-  const actions: Record<string, string>[] = [
+  const actions: Record<string, any>[] = [
     // { label: '数据看板', component: Dashboard },
     // { label: '页面风格配置', component: PlatteSetting },
   ];

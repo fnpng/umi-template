@@ -1,6 +1,5 @@
 import { userStore } from '@/store';
 import copyText from '@/utils/copyText';
-import { Platte } from '@icon-park/react';
 import { useSnapshot } from '@umijs/max';
 import {
   Alert,
@@ -15,6 +14,7 @@ import {
   Switch,
 } from 'antd';
 import { ReactNode, useEffect, useState } from 'react';
+import { IoMdColorPalette } from 'react-icons/io';
 import { Message } from '../AntdFeedback';
 
 const Block = ({
@@ -106,14 +106,14 @@ export default function PlatteSetting({
         onClick={() => {
           setCollapse(true);
         }}
-        className="px-2 py-1"
+        className="px-2 py-1 flex_center"
       >
-        <Platte />
+        <IoMdColorPalette />
       </div>
       <Drawer
         title={
           <>
-            <Platte /> 页面风格配置
+            <IoMdColorPalette /> 页面风格配置
           </>
         }
         placement="right"

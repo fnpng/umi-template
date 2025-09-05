@@ -1,4 +1,4 @@
-import { UploadOne } from '@icon-park/react';
+import CustomUpload from '@/components/CustomUpload';
 import {
   Button,
   Card,
@@ -17,7 +17,6 @@ import {
   TimePicker,
   Transfer,
   TreeSelect,
-  Upload,
 } from 'antd';
 
 export default function Index() {
@@ -111,12 +110,7 @@ export default function Index() {
             <ColorPicker showText />
           </Form.Item>
           <Form.Item label="图片上传" name="upload">
-            <Upload.Dragger fileList={[]}>
-              <UploadOne className="text-gray-500 text-2xl" />
-              <div className="text-center text-sm text-gray-500">
-                点击或拖拽文件到此区域上传
-              </div>
-            </Upload.Dragger>
+            <CustomUpload />
           </Form.Item>
           <div className="col-span-3">
             <Button type="primary" htmlType="submit">
